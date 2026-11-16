@@ -13,16 +13,16 @@ final class ShoppingItem {
     var ingredient: Ingredient
     var quantity: Double
     var unit: MeasurementUnit
-    var isPurchased: Bool = false
-    var isAtHome: Bool = false
+    var isPurchased: Bool
+    var isAtHome: Bool
     
     init (
         id: UUID = UUID(),
         ingredient: Ingredient,
         quantity: Double,
         unit: MeasurementUnit,
-        isPurchased: Bool,
-        isAtHome: Bool
+        isPurchased: Bool = false,
+        isAtHome: Bool = false
     ) {
         self.id = id
         self.ingredient = ingredient
