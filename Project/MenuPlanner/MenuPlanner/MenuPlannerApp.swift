@@ -12,10 +12,9 @@ import SwiftData
 struct MenuPlannerApp: App {
     @State private var userSettings = UserSettings()
     
-    var body: some Scene {
-        
+    var body: some Scene {        
         WindowGroup {
-            Text("Menu Planner")
+            RootView(userSettings: userSettings)
         }.modelContainer(for: AppSchema.models)
     }
 }

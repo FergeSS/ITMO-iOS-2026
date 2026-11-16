@@ -13,8 +13,10 @@ final class Recipe {
     var name: String
     var recipeDescription: String
     var durationMinutes: Int
-    var baseServings: Int
+    private(set) var baseServings: Int
     var photoData: Data?
+    var isBuiltIn: Bool = false
+    var isFavorite: Bool = false
     
     @Relationship(deleteRule:  .cascade)
     var ingredients: [RecipeIngredient]
@@ -25,13 +27,23 @@ final class Recipe {
         recipeDescription: String,
         durationMinutes: Int,
         baseServings: Int,
-        ingredients: [RecipeIngredient]
+        ingredients: [RecipeIngredient],
+        photoData: Data? = nil,
+        isBuiltIn: Bool = false,
+        isFavorite: Bool = false
     ) {
         self.id = id
         self.name = name
         self.recipeDescription = recipeDescription
         self.durationMinutes = durationMinutes
-        self.baseServings = baseServings
+        self.baseServings = max(1, baseServings)
         self.ingredients = ingredients
+        self.photoData = photoData
+        self.isBuiltIn = isBuiltIn
+        self.isFavorite = isFavorite
+    }
+
+    func updateBaseServings(to servings: Int) {
+        baseServings = max(1, servings)
     }
 }
