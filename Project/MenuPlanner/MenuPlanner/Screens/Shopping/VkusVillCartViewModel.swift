@@ -119,7 +119,7 @@ final class VkusVillCartViewModel {
             return nil
         }
         return amounts.sorted(by: { $0.key < $1.key }).map {
-            VkusVillCatalog.CartItem(id: $0.key, q: $0.value)
+            VkusVillCatalog.CartItem(id: $0.key, quantity: $0.value)
         }
     }
 

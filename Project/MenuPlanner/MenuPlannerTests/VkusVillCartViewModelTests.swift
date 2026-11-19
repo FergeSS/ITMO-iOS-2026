@@ -4,35 +4,37 @@ import XCTest
 @MainActor
 final class VkusVillCartViewModelTests: CatalogTestCase {
     func testGroupsByIngredientSortsAndExcludesPurchasedAndAtHomeItems() throws {
-        let a = Ingredient(name: "А")
-        let b = Ingredient(name: "Б")
+        let first = Ingredient(name: "А")
+        let second = Ingredient(name: "Б")
         let purchased = item(Ingredient(name: "Куплен"))
         purchased.isPurchased = true
         let atHome = item(Ingredient(name: "Дома"))
         atHome.isAtHome = true
-        let model = VkusVillCartViewModel(items: [item(b), item(a), item(a), purchased, atHome], catalog: catalog)
+        let model = VkusVillCartViewModel(
+            items: [item(second), item(first), item(first), purchased, atHome], catalog: catalog
+        )
         XCTAssertEqual(model.lines.map { $0.ingredient.name }, ["А", "Б"])
         XCTAssertEqual(model.lines[0].items.count, 2)
-        XCTAssertEqual(model.currentLine?.id, a.id)
+        XCTAssertEqual(model.currentLine?.id, first.id)
         XCTAssertEqual(model.pendingLines.count, 2)
         XCTAssertTrue(model.lines[0].requiredAmount.contains(" + "))
     }
 
     func testSkipRevisitAndEditingOrder() throws {
-        let a = Ingredient(name: "А")
-        let b = Ingredient(name: "Б")
-        let model = VkusVillCartViewModel(items: [item(a), item(b)], catalog: catalog)
-        let first = try XCTUnwrap(model.currentLine)
-        model.skip(first)
-        XCTAssertEqual(model.skipped, [a.id])
-        XCTAssertEqual(model.currentLine?.id, b.id)
-        model.changeProduct(for: first)
-        XCTAssertEqual(model.currentLine?.id, a.id)
-        model.skip(first)
+        let first = Ingredient(name: "А")
+        let second = Ingredient(name: "Б")
+        let model = VkusVillCartViewModel(items: [item(first), item(second)], catalog: catalog)
+        let firstLine = try XCTUnwrap(model.currentLine)
+        model.skip(firstLine)
+        XCTAssertEqual(model.skipped, [first.id])
+        XCTAssertEqual(model.currentLine?.id, second.id)
+        model.changeProduct(for: firstLine)
+        XCTAssertEqual(model.currentLine?.id, first.id)
+        model.skip(firstLine)
         model.revisitSkipped()
         XCTAssertTrue(model.skipped.isEmpty)
         XCTAssertNil(model.editingID)
-        XCTAssertEqual(model.currentLine?.id, a.id)
+        XCTAssertEqual(model.currentLine?.id, first.id)
     }
 
     func testChoosingProductClearsSkippedAndResetsEditingWithSuggestedAmount() throws {
@@ -88,14 +90,14 @@ final class VkusVillCartViewModelTests: CatalogTestCase {
     }
 
     func testWeightedQuantitiesAcceptCommaAndMergedProductIDsAreSummed() async throws {
-        let a = Ingredient(name: "А")
-        let b = Ingredient(name: "Б")
+        let first = Ingredient(name: "А")
+        let second = Ingredient(name: "Б")
         let selected = product(42, unit: "кг")
-        try a.updateVkusVillProduct(selected)
-        try b.updateVkusVillProduct(selected)
-        let model = VkusVillCartViewModel(items: [item(a), item(b)], catalog: catalog)
-        model.setQuantity(" 0,25 ", for: a.id)
-        model.setQuantity("0.5", for: b.id)
+        try first.updateVkusVillProduct(selected)
+        try second.updateVkusVillProduct(selected)
+        let model = VkusVillCartViewModel(items: [item(first), item(second)], catalog: catalog)
+        model.setQuantity(" 0,25 ", for: first.id)
+        model.setQuantity("0.5", for: second.id)
         serveTool(["link": "https://vkusvill.ru/cart/test"])
         await model.buildCart()
         XCTAssertEqual(model.cartURL?.path, "/cart/test")
@@ -107,18 +109,18 @@ final class VkusVillCartViewModelTests: CatalogTestCase {
         XCTAssertEqual(products.count, 1)
         XCTAssertEqual(products[0]["id"] as? Int, 42)
         XCTAssertEqual(products[0]["q"] as? Double, 0.75)
-        model.setQuantity("1", for: a.id)
+        model.setQuantity("1", for: first.id)
         XCTAssertNil(model.cartURL, "Changing a quantity invalidates the previously generated link")
     }
 
     func testMergedQuantityOverFortyIsRejectedEvenIfEachLineIsValid() async throws {
-        let a = Ingredient(name: "А")
-        let b = Ingredient(name: "Б")
-        try a.updateVkusVillProduct(product(42))
-        try b.updateVkusVillProduct(product(42))
-        let model = VkusVillCartViewModel(items: [item(a), item(b)], catalog: catalog)
-        model.setQuantity("21", for: a.id)
-        model.setQuantity("20", for: b.id)
+        let first = Ingredient(name: "А")
+        let second = Ingredient(name: "Б")
+        try first.updateVkusVillProduct(product(42))
+        try second.updateVkusVillProduct(product(42))
+        let model = VkusVillCartViewModel(items: [item(first), item(second)], catalog: catalog)
+        model.setQuantity("21", for: first.id)
+        model.setQuantity("20", for: second.id)
         await model.buildCart()
         XCTAssertTrue(model.errorMessage?.contains("до 40") == true)
         XCTAssertTrue(StubURLProtocol.requests.isEmpty)

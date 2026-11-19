@@ -41,14 +41,17 @@ final class RecipesViewModelTests: XCTestCase {
     }
 
     func testSortByDurationUsesNameForTiesAndExcludesBuiltInRecipes() {
-        let a = recipe("А", duration: 20)
-        let b = recipe("Б", duration: 20)
-        let c = recipe("В", duration: 10)
+        let first = recipe("А", duration: 20)
+        let second = recipe("Б", duration: 20)
+        let quick = recipe("В", duration: 10)
         let builtIn = recipe("Пример", duration: 1)
         builtIn.isBuiltIn = true
         let viewModel = RecipesViewModel()
         viewModel.sort = .duration
-        XCTAssertEqual(viewModel.visibleRecipes(from: [b, builtIn, a, c]).map(\.id), [c.id, a.id, b.id])
+        XCTAssertEqual(
+            viewModel.visibleRecipes(from: [second, builtIn, first, quick]).map(\.id),
+            [quick.id, first.id, second.id]
+        )
     }
 
     func testNameSortUsesIDForStableOrderingOfIdenticalNames() {
