@@ -1,10 +1,7 @@
 import Foundation
 
 struct VkusVillCatalog {
-    struct CartItem: Encodable {
-        let id: Int
-        let q: Double
-    }
+    typealias CartItem = VkusVillCartItem
 
     private struct ClientInfo: Encodable {
         let name = "MenuPlanner"
@@ -51,27 +48,8 @@ struct VkusVillCatalog {
         let data: Result?
     }
 
-    private struct SearchArguments: Encodable {
-        let q: String
-        let limit = 10
-        let mode = "custom"
-        let fields = ["id", "name", "price", "unit", "weight", "url", "images"]
-    }
-
     private struct SearchResult: Decodable {
         let items: [VkusVillProduct]
-    }
-
-    private struct RecipeSearchArguments: Encodable {
-        let q: String
-        let page: Int
-        let sort = "popularity"
-        let id_feature_filter = 0
-        let id_cooking_time_filter = 0
-        let id_cooking_method_filter = 0
-        let id_complexity_filter = 0
-        let id_category_filter = 0
-        let id_exclude_allergens_filter: [Int] = []
     }
 
     struct RecipePage: Decodable {
@@ -107,13 +85,13 @@ struct VkusVillCatalog {
     }
 
     func search(_ query: String) async throws -> [VkusVillProduct] {
-        let result: SearchResult = try await call("vkusvill_products_search", arguments: SearchArguments(q: query))
+        let result: SearchResult = try await call("vkusvill_products_search", arguments: SearchArguments(query: query))
         var seen: Set<Int> = []
         return result.items.filter { $0.id > 0 && seen.insert($0.id).inserted }
     }
 
     func searchRecipes(_ query: String, page: Int = 1) async throws -> RecipePage {
-        try await call("vkusvill_recipes", arguments: RecipeSearchArguments(q: query, page: page))
+        try await call("vkusvill_recipes", arguments: RecipeSearchArguments(query: query, page: page))
     }
 
     func product(id: Int) async throws -> VkusVillProduct {
@@ -135,7 +113,7 @@ struct VkusVillCatalog {
 
     func createCartLink(items: [CartItem]) async throws -> URL {
         guard (1...100).contains(items.count),
-              items.allSatisfy({ $0.id > 0 && (0.01...40).contains($0.q)
+              items.allSatisfy({ $0.id > 0 && (0.01...40).contains($0.quantity)
         }) else {
             throw URLError(.badURL)
         }
@@ -223,4 +201,49 @@ struct VkusVillCatalog {
         }
         throw URLError(.cannotParseResponse)
     }
+}
+
+struct VkusVillCartItem: Encodable {
+    private enum CodingKeys: String, CodingKey {
+        case id
+        case quantity = "q"
+    }
+
+    let id: Int
+    let quantity: Double
+}
+
+private struct SearchArguments: Encodable {
+    private enum CodingKeys: String, CodingKey {
+        case query = "q"
+        case limit, mode, fields
+    }
+
+    let query: String
+    let limit = 10
+    let mode = "custom"
+    let fields = ["id", "name", "price", "unit", "weight", "url", "images"]
+}
+
+private struct RecipeSearchArguments: Encodable {
+    private enum CodingKeys: String, CodingKey {
+        case query = "q"
+        case page, sort
+        case featureFilterID = "id_feature_filter"
+        case cookingTimeFilterID = "id_cooking_time_filter"
+        case cookingMethodFilterID = "id_cooking_method_filter"
+        case complexityFilterID = "id_complexity_filter"
+        case categoryFilterID = "id_category_filter"
+        case excludedAllergenFilterIDs = "id_exclude_allergens_filter"
+    }
+
+    let query: String
+    let page: Int
+    let sort = "popularity"
+    let featureFilterID = 0
+    let cookingTimeFilterID = 0
+    let cookingMethodFilterID = 0
+    let complexityFilterID = 0
+    let categoryFilterID = 0
+    let excludedAllergenFilterIDs: [Int] = []
 }

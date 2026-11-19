@@ -229,10 +229,6 @@ struct RecipesView: View {
 }
 
 #Preview("Рецепты") {
-    let container = try! ModelContainer(
-        for: Recipe.self,
-        configurations: ModelConfiguration(isStoredInMemoryOnly: true)
-    )
     NavigationStack { RecipesView() }
-        .modelContainer(container)
+        .modelContainer(for: Recipe.self, inMemory: true)
 }

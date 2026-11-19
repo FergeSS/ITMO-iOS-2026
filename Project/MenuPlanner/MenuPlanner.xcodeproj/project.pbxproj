@@ -116,6 +116,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				A80000000000000000000005 /* SwiftLintBuildToolPlugin */,
 			);
 			fileSystemSynchronizedGroups = (
 				332CFFBF30882962008031E8 /* MenuPlanner */,
@@ -138,6 +139,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				A80000000000000000000006 /* SwiftLintBuildToolPlugin */,
 				A7000000000000000000000B /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
@@ -161,6 +163,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				A80000000000000000000007 /* SwiftLintBuildToolPlugin */,
 				A7000000000000000000000C /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
@@ -205,6 +208,9 @@
 			);
 			mainGroup = 332CFFB430882962008031E8;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				A80000000000000000000001 /* XCRemoteSwiftPackageReference "SwiftLintPlugins" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 332CFFBE30882962008031E8 /* Products */;
 			projectDirPath = "";
@@ -275,6 +281,18 @@
 			isa = PBXTargetDependency;
 			target = 332CFFBC30882962008031E8 /* MenuPlanner */;
 			targetProxy = A70000000000000000000012 /* PBXContainerItemProxy */;
+		};
+		A80000000000000000000005 /* SwiftLintBuildToolPlugin */ = {
+			isa = PBXTargetDependency;
+			productRef = A80000000000000000000002 /* SwiftLintBuildToolPlugin */;
+		};
+		A80000000000000000000006 /* SwiftLintBuildToolPlugin */ = {
+			isa = PBXTargetDependency;
+			productRef = A80000000000000000000003 /* SwiftLintBuildToolPlugin */;
+		};
+		A80000000000000000000007 /* SwiftLintBuildToolPlugin */ = {
+			isa = PBXTargetDependency;
+			productRef = A80000000000000000000004 /* SwiftLintBuildToolPlugin */;
 		};
 /* End PBXTargetDependency section */
 
@@ -555,6 +573,35 @@
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		A80000000000000000000001 /* XCRemoteSwiftPackageReference "SwiftLintPlugins" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SimplyDanny/SwiftLintPlugins";
+			requirement = {
+				kind = exactVersion;
+				version = 0.65.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		A80000000000000000000002 /* SwiftLintBuildToolPlugin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A80000000000000000000001 /* XCRemoteSwiftPackageReference "SwiftLintPlugins" */;
+			productName = "plugin:SwiftLintBuildToolPlugin";
+		};
+		A80000000000000000000003 /* SwiftLintBuildToolPlugin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A80000000000000000000001 /* XCRemoteSwiftPackageReference "SwiftLintPlugins" */;
+			productName = "plugin:SwiftLintBuildToolPlugin";
+		};
+		A80000000000000000000004 /* SwiftLintBuildToolPlugin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A80000000000000000000001 /* XCRemoteSwiftPackageReference "SwiftLintPlugins" */;
+			productName = "plugin:SwiftLintBuildToolPlugin";
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCConfigurationList section */
 		332CFFB830882962008031E8 /* Build configuration list for PBXProject "MenuPlanner" */ = {

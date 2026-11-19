@@ -44,6 +44,12 @@ final class VkusVillCatalogTests: CatalogTestCase {
         let args = try XCTUnwrap(params["arguments"] as? [String: Any])
         XCTAssertEqual(args["page"] as? Int, 3)
         XCTAssertEqual(args["q"] as? String, "каша")
+        XCTAssertEqual(Set(args.keys), [
+            "q", "page", "sort", "id_feature_filter", "id_cooking_time_filter",
+            "id_cooking_method_filter", "id_complexity_filter", "id_category_filter", "id_exclude_allergens_filter"
+        ])
+        XCTAssertEqual(args["sort"] as? String, "popularity")
+        XCTAssertEqual(args["id_exclude_allergens_filter"] as? [Int], [])
     }
 
     func testProductDetailsSendsRequestedID() async throws {
@@ -105,10 +111,10 @@ final class VkusVillCatalogTests: CatalogTestCase {
 
     func testCartRejectsInvalidCountsIDsAndQuantitiesBeforeHTTP() async {
         let bad: [[VkusVillCatalog.CartItem]] = [
-            [], Array(repeating: .init(id: 1, q: 1), count: 101),
-            [.init(id: 0, q: 1)], [.init(id: -1, q: 1)],
-            [.init(id: 1, q: 0)], [.init(id: 1, q: 0.009)],
-            [.init(id: 1, q: 40.01)], [.init(id: 1, q: .nan)], [.init(id: 1, q: .infinity)]
+            [], Array(repeating: .init(id: 1, quantity: 1), count: 101),
+            [.init(id: 0, quantity: 1)], [.init(id: -1, quantity: 1)],
+            [.init(id: 1, quantity: 0)], [.init(id: 1, quantity: 0.009)],
+            [.init(id: 1, quantity: 40.01)], [.init(id: 1, quantity: .nan)], [.init(id: 1, quantity: .infinity)]
         ]
         for items in bad {
             do { _ = try await catalog.createCartLink(items: items); XCTFail("Expected rejection") }
@@ -119,7 +125,7 @@ final class VkusVillCatalogTests: CatalogTestCase {
 
     func testCartAcceptsBoundaryAmountsAndSerializesProducts() async throws {
         serveTool(["link": "https://vkusvill.ru/cart/test"])
-        let items = [VkusVillCatalog.CartItem(id: 1, q: 0.01), .init(id: 2, q: 40)]
+        let items = [VkusVillCatalog.CartItem(id: 1, quantity: 0.01), .init(id: 2, quantity: 40)]
         let url = try await catalog.createCartLink(items: items)
         XCTAssertEqual(url.absoluteString, "https://vkusvill.ru/cart/test")
         let body = try Self.body(of: XCTUnwrap(StubURLProtocol.requests.last))
@@ -132,14 +138,17 @@ final class VkusVillCatalogTests: CatalogTestCase {
 
     func testCartAcceptsOneHundredProducts() async throws {
         serveTool(["link": "https://vkusvill.ru/cart/test"])
-        _ = try await catalog.createCartLink(items: (1...100).map { .init(id: $0, q: 1) })
+        _ = try await catalog.createCartLink(items: (1...100).map { .init(id: $0, quantity: 1) })
         XCTAssertEqual(StubURLProtocol.requests.count, 3)
     }
 
     func testCartRejectsUnofficialOrInsecureReturnedLinks() async {
         for link in ["http://vkusvill.ru/cart", "https://evil.example/cart", "https://vkusvill.ru.evil.example/cart"] {
             serveTool(["link": link])
-            do { _ = try await catalog.createCartLink(items: [.init(id: 1, q: 1)]); XCTFail("Expected rejection") }
+            do {
+                _ = try await catalog.createCartLink(items: [.init(id: 1, quantity: 1)])
+                XCTFail("Expected rejection")
+            }
             catch { XCTAssertEqual((error as? URLError)?.code, .badServerResponse) }
         }
     }

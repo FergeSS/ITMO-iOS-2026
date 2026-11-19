@@ -247,6 +247,9 @@ final class MenuPlannerUITests: XCTestCase {
         XCTAssertTrue(app.staticTexts["Куплено 0 из 1"].exists)
     }
 
+}
+
+extension MenuPlannerUITests {
     func testOpeningEmptyInternetSearchAndClosingDoesNotCreateRecipe() {
         launchMainScreen()
         openRecipes()

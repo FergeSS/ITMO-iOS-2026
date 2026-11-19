@@ -59,15 +59,19 @@ final class ShoppingListBuilderTests: XCTestCase {
 
     func testUnitConverterNormalizesMassAndVolumeAndPreservesOtherUnits() {
         let converter = MenuPlanner.UnitConverter()
-        for (unit, quantity, expectedUnit, expectedQuantity): (MeasurementUnit, Double, MeasurementUnit, Double) in [
-            (.kilogram, 0.125, .gram, 125), (.liter, 1.5, .milliliter, 1_500),
-            (.gram, 12, .gram, 12), (.milliliter, 30, .milliliter, 30),
-            (.piece, 2, .piece, 2), (.teaspoon, 0.5, .teaspoon, 0.5),
-            (.tablespoon, 3, .tablespoon, 3)
-        ] {
-            let actual = converter.normalize(quantity: quantity, unit: unit)
-            XCTAssertEqual(actual.unit, expectedUnit)
-            XCTAssertEqual(actual.quantity, expectedQuantity, accuracy: 0.000_001)
+        let cases: [UnitConversionCase] = [
+            .init(unit: .kilogram, quantity: 0.125, expectedUnit: .gram, expectedQuantity: 125),
+            .init(unit: .liter, quantity: 1.5, expectedUnit: .milliliter, expectedQuantity: 1_500),
+            .init(unit: .gram, quantity: 12, expectedUnit: .gram, expectedQuantity: 12),
+            .init(unit: .milliliter, quantity: 30, expectedUnit: .milliliter, expectedQuantity: 30),
+            .init(unit: .piece, quantity: 2, expectedUnit: .piece, expectedQuantity: 2),
+            .init(unit: .teaspoon, quantity: 0.5, expectedUnit: .teaspoon, expectedQuantity: 0.5),
+            .init(unit: .tablespoon, quantity: 3, expectedUnit: .tablespoon, expectedQuantity: 3)
+        ]
+        for testCase in cases {
+            let actual = converter.normalize(quantity: testCase.quantity, unit: testCase.unit)
+            XCTAssertEqual(actual.unit, testCase.expectedUnit)
+            XCTAssertEqual(actual.quantity, testCase.expectedQuantity, accuracy: 0.000_001)
         }
     }
 
@@ -78,4 +82,11 @@ final class ShoppingListBuilderTests: XCTestCase {
                             ingredients: [RecipeIngredient(ingredient: ingredient, quantity: quantity, unit: unit)])
         return MealPlanEntry(date: .now, mealType: .dinner, recipe: recipe, servings: servings)
     }
+}
+
+private struct UnitConversionCase {
+    let unit: MeasurementUnit
+    let quantity: Double
+    let expectedUnit: MeasurementUnit
+    let expectedQuantity: Double
 }

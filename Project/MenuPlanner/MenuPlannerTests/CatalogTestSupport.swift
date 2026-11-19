@@ -117,7 +117,7 @@ class CatalogTestCase: XCTestCase {
             }
             data = collected
         }
-        return try JSONSerialization.jsonObject(with: XCTUnwrap(data)) as! [String: Any]
+        return try XCTUnwrap(JSONSerialization.jsonObject(with: XCTUnwrap(data)) as? [String: Any])
     }
 
     func product(_ id: Int = 1, name: String = "Рис", unit: String = "шт",
