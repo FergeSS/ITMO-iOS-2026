@@ -22,9 +22,10 @@ final class VkusVillCartViewModel {
     private(set) var isLoading = false
     private(set) var errorMessage: String?
 
-    private let catalog = VkusVillCatalog()
+    private let catalog: VkusVillCatalog
 
-    init(items: [ShoppingItem]) {
+    init(items: [ShoppingItem], catalog: VkusVillCatalog? = nil) {
+        self.catalog = catalog ?? VkusVillCatalog()
         let pending = items.filter { !$0.isAtHome && !$0.isPurchased }
         lines = Dictionary(grouping: pending, by: { $0.ingredient.id }).values.compactMap { group in
             guard let ingredient = group.first?.ingredient else { return nil }

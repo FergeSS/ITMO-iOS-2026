@@ -251,6 +251,8 @@ struct ShoppingView: View {
                     .frame(width: 40, height: 40)
                     .contentShape(Rectangle())
             }
+            .accessibilityLabel("Действия с продуктом \(item.ingredient.name)")
+            .accessibilityIdentifier("shopping.itemActions.\(item.ingredient.name)")
         }
     }
 

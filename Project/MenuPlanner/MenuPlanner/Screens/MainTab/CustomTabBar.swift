@@ -39,6 +39,7 @@ struct CustomTabBar: View {
             .contentShape(RoundedRectangle(cornerRadius: 20))
         }
         .buttonStyle(.plain)
+        .accessibilityIdentifier("tab.\(tab.rawValue)")
     }
 }
 

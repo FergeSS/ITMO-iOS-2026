@@ -11,6 +11,7 @@ struct RecipeIngredientEditorRow: View {
             HStack(alignment: .top, spacing: 8) {
                 RecipeEditorFieldView(error: showsErrors ? row.nameError : nil) {
                     TextField("Название продукта", text: $row.name)
+                        .accessibilityIdentifier("recipeEditor.ingredientName")
                         .focused(focus, equals: .ingredientName(row.id))
                         .submitLabel(.next)
                         .onSubmit { focus.wrappedValue = .ingredientQuantity(row.id) }
@@ -21,10 +22,13 @@ struct RecipeIngredientEditorRow: View {
                     Image(systemName: "trash").frame(width: 44, height: 48)
                 }
                 .buttonStyle(.borderless)
+                .accessibilityLabel("Удалить ингредиент")
+                .accessibilityIdentifier("recipeEditor.deleteIngredient")
             }
             HStack(alignment: .top, spacing: 12) {
                 RecipeEditorFieldView(error: showsErrors ? row.quantityError : nil) {
                     TextField("Количество", text: $row.quantity)
+                        .accessibilityIdentifier("recipeEditor.ingredientQuantity")
                         .keyboardType(.decimalPad)
                         .focused(focus, equals: .ingredientQuantity(row.id))
                 }

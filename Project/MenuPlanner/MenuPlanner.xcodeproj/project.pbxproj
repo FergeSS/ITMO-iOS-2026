@@ -6,9 +6,28 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXContainerItemProxy section */
+		A70000000000000000000011 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 332CFFB530882962008031E8 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 332CFFBC30882962008031E8;
+			remoteInfo = MenuPlanner;
+		};
+		A70000000000000000000012 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 332CFFB530882962008031E8 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 332CFFBC30882962008031E8;
+			remoteInfo = MenuPlanner;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		332CFFBD30882962008031E8 /* MenuPlanner.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MenuPlanner.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7C31D51A87D140BCA0934811 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A7000000000000000000000F /* MenuPlannerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MenuPlannerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A70000000000000000000010 /* MenuPlannerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MenuPlannerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -17,10 +36,34 @@
 			path = MenuPlanner;
 			sourceTree = "<group>";
 		};
+		A7000000000000000000000D /* MenuPlannerTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = MenuPlannerTests;
+			sourceTree = "<group>";
+		};
+		A7000000000000000000000E /* MenuPlannerUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = MenuPlannerUITests;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		332CFFBA30882962008031E8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A70000000000000000000006 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A70000000000000000000009 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -34,6 +77,8 @@
 			isa = PBXGroup;
 			children = (
 				332CFFBF30882962008031E8 /* MenuPlanner */,
+				A7000000000000000000000D /* MenuPlannerTests */,
+				A7000000000000000000000E /* MenuPlannerUITests */,
 				7C31D51A87D140BCA0934812 /* Configuration */,
 				332CFFBE30882962008031E8 /* Products */,
 			);
@@ -43,6 +88,8 @@
 			isa = PBXGroup;
 			children = (
 				332CFFBD30882962008031E8 /* MenuPlanner.app */,
+				A7000000000000000000000F /* MenuPlannerTests.xctest */,
+				A70000000000000000000010 /* MenuPlannerUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -80,6 +127,52 @@
 			productReference = 332CFFBD30882962008031E8 /* MenuPlanner.app */;
 			productType = "com.apple.product-type.application";
 		};
+		A70000000000000000000001 /* MenuPlannerTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A70000000000000000000003 /* Build configuration list for PBXNativeTarget "MenuPlannerTests" */;
+			buildPhases = (
+				A70000000000000000000005 /* Sources */,
+				A70000000000000000000006 /* Frameworks */,
+				A70000000000000000000007 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A7000000000000000000000B /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				A7000000000000000000000D /* MenuPlannerTests */,
+			);
+			name = MenuPlannerTests;
+			packageProductDependencies = (
+			);
+			productName = MenuPlannerTests;
+			productReference = A7000000000000000000000F /* MenuPlannerTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		A70000000000000000000002 /* MenuPlannerUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A70000000000000000000004 /* Build configuration list for PBXNativeTarget "MenuPlannerUITests" */;
+			buildPhases = (
+				A70000000000000000000008 /* Sources */,
+				A70000000000000000000009 /* Frameworks */,
+				A7000000000000000000000A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A7000000000000000000000C /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				A7000000000000000000000E /* MenuPlannerUITests */,
+			);
+			name = MenuPlannerUITests;
+			packageProductDependencies = (
+			);
+			productName = MenuPlannerUITests;
+			productReference = A70000000000000000000010 /* MenuPlannerUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -92,6 +185,14 @@
 				TargetAttributes = {
 					332CFFBC30882962008031E8 = {
 						CreatedOnToolsVersion = 26.6;
+					};
+					A70000000000000000000001 = {
+						CreatedOnToolsVersion = 26.6;
+						TestTargetID = 332CFFBC30882962008031E8;
+					};
+					A70000000000000000000002 = {
+						CreatedOnToolsVersion = 26.6;
+						TestTargetID = 332CFFBC30882962008031E8;
 					};
 				};
 			};
@@ -109,6 +210,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
+				A70000000000000000000001 /* MenuPlannerTests */,
+				A70000000000000000000002 /* MenuPlannerUITests */,
 				332CFFBC30882962008031E8 /* MenuPlanner */,
 			);
 		};
@@ -116,6 +219,20 @@
 
 /* Begin PBXResourcesBuildPhase section */
 		332CFFBB30882962008031E8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A70000000000000000000007 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A7000000000000000000000A /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -132,7 +249,34 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		A70000000000000000000005 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A70000000000000000000008 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		A7000000000000000000000B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 332CFFBC30882962008031E8 /* MenuPlanner */;
+			targetProxy = A70000000000000000000011 /* PBXContainerItemProxy */;
+		};
+		A7000000000000000000000C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 332CFFBC30882962008031E8 /* MenuPlanner */;
+			targetProxy = A70000000000000000000012 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		332CFFDE30882964008031E8 /* Debug */ = {
@@ -172,6 +316,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = V36658JRQ5;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -323,6 +468,92 @@
 			};
 			name = Release;
 		};
+		A70000000000000000000013 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = V36658JRQ5;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.6;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = FergeS.MenuPlannerTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MenuPlanner.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/MenuPlanner";
+			};
+			name = Debug;
+		};
+		A70000000000000000000014 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = V36658JRQ5;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.6;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = FergeS.MenuPlannerTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MenuPlanner.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/MenuPlanner";
+			};
+			name = Release;
+		};
+		A70000000000000000000015 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = V36658JRQ5;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.6;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = FergeS.MenuPlannerUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = MenuPlanner;
+			};
+			name = Debug;
+		};
+		A70000000000000000000016 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = V36658JRQ5;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.6;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = FergeS.MenuPlannerUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = MenuPlanner;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -340,6 +571,24 @@
 			buildConfigurations = (
 				332CFFE130882964008031E8 /* Debug */,
 				332CFFE230882964008031E8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A70000000000000000000003 /* Build configuration list for PBXNativeTarget "MenuPlannerTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A70000000000000000000013 /* Debug */,
+				A70000000000000000000014 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A70000000000000000000004 /* Build configuration list for PBXNativeTarget "MenuPlannerUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A70000000000000000000015 /* Debug */,
+				A70000000000000000000016 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

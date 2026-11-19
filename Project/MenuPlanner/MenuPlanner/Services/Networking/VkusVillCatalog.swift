@@ -96,6 +96,15 @@ struct VkusVillCatalog {
     }
 
     private let endpoint = URL(string: "https://mcp.vkusvill.ru/mcp")!
+    private let session: URLSession
+
+    init(session: URLSession? = nil) {
+        #if DEBUG
+        self.session = session ?? UITestNetwork.session() ?? .shared
+        #else
+        self.session = session ?? .shared
+        #endif
+    }
 
     func search(_ query: String) async throws -> [VkusVillProduct] {
         let result: SearchResult = try await call("vkusvill_products_search", arguments: SearchArguments(q: query))
@@ -112,7 +121,7 @@ struct VkusVillCatalog {
     }
 
     func recipePhoto(from url: URL) async throws -> Data {
-        let (data, response) = try await URLSession.shared.data(
+        let (data, response) = try await session.data(
             for: URLRequest(url: url, timeoutInterval: 12)
         )
         guard let response = response as? HTTPURLResponse,
@@ -125,22 +134,34 @@ struct VkusVillCatalog {
     }
 
     func createCartLink(items: [CartItem]) async throws -> URL {
-        guard (1...100).contains(items.count), items.allSatisfy({ $0.id > 0 && (0.01...40).contains($0.q) }) else {
+        guard (1...100).contains(items.count),
+              items.allSatisfy({ $0.id > 0 && (0.01...40).contains($0.q)
+        }) else {
             throw URLError(.badURL)
         }
-        let result: CartResult = try await call("vkusvill_cart_link_create", arguments: CartArguments(products: items))
-        guard result.link.scheme == "https", result.link.host == "vkusvill.ru" else {
+
+        let result: CartResult = try await call(
+            "vkusvill_cart_link_create",
+            arguments: CartArguments(products: items)
+        )
+
+        guard result.link.scheme == "https",
+                result.link.host == "vkusvill.ru"
+        else {
             throw URLError(.badServerResponse)
         }
+
         return result.link
     }
 
     private func call<Arguments: Encodable, Result: Decodable>(
-        _ name: String, arguments: Arguments
+        _ name: String,
+        arguments: Arguments
     ) async throws -> Result {
         let (initData, initResponse) = try await send(
             Request(id: 1, method: "initialize", params: Initialization())
         )
+
         let initialized: InitializationResult = try decodeResponse(initData)
         let sessionID = initResponse.value(forHTTPHeaderField: "Mcp-Session-Id")
 
@@ -148,21 +169,26 @@ struct VkusVillCatalog {
             Request<[String: String]>(id: nil, method: "notifications/initialized", params: nil),
             version: initialized.protocolVersion, sessionID: sessionID
         )
+
         let (data, _) = try await send(
             Request(id: 2, method: "tools/call", params: ToolCall(name: name, arguments: arguments)),
             version: initialized.protocolVersion, sessionID: sessionID
         )
+
         let toolResult: ToolResult = try decodeResponse(data)
         guard toolResult.isError != true,
               let payload = toolResult.content.first(where: { $0.type == "text" })?.text else {
             throw URLError(.badServerResponse)
         }
+
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase
         let decoded = try decoder.decode(ToolPayload<Result>.self, from: Data(payload.utf8))
+
         guard decoded.ok, let result = decoded.data else {
             throw URLError(.badServerResponse)
         }
+
         return result
     }
 
@@ -177,7 +203,7 @@ struct VkusVillCatalog {
         request.setValue(version, forHTTPHeaderField: "MCP-Protocol-Version")
         request.setValue(sessionID, forHTTPHeaderField: "Mcp-Session-Id")
         request.httpBody = try JSONEncoder().encode(message)
-        let (data, response) = try await URLSession.shared.data(for: request)
+        let (data, response) = try await session.data(for: request)
         guard let http = response as? HTTPURLResponse, (200..<300).contains(http.statusCode) else {
             throw URLError(.badServerResponse)
         }

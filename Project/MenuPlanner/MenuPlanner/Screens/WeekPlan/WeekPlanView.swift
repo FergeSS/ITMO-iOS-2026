@@ -60,6 +60,7 @@ struct WeekPlanView: View {
                             }
                         }
                         .buttonStyle(.plain)
+                        .accessibilityIdentifier("weekPlan.meal.\(type.rawValue)")
                     }
                 }
 
@@ -77,6 +78,7 @@ struct WeekPlanView: View {
                 }
                 .buttonStyle(.plain)
                 .disabled(weekEntries.isEmpty)
+                .accessibilityIdentifier("weekPlan.collectShoppingList")
 
                 let count = RecipeFormatting.count(weekEntries.count, one: "блюдо", few: "блюда", many: "блюд")
                 Text("\(count) на неделю")
@@ -148,6 +150,8 @@ struct WeekPlanView: View {
                     .background(AppColors.surface, in: Circle())
             }
             .buttonStyle(.plain)
+            .accessibilityLabel("Порции по умолчанию")
+            .accessibilityIdentifier("weekPlan.defaultServings")
         }
     }
 
@@ -172,6 +176,7 @@ struct WeekPlanView: View {
                 .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
+        .accessibilityIdentifier(offset < 0 ? "weekPlan.previousWeek" : "weekPlan.nextWeek")
     }
 
     private func weekCalendar(_ entries: [MealPlanEntry]) -> some View {
@@ -332,4 +337,11 @@ private struct MealSlotEditor: View {
 
 private extension String {
     var capitalizedFirstLetter: String { prefix(1).uppercased() + dropFirst() }
+}
+
+#Preview("Меню на неделю") {
+    NavigationStack {
+        WeekPlanView(onCollect: { _ in })
+    }
+    .modelContainer(for: AppSchema.models, inMemory: true)
 }

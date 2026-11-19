@@ -46,8 +46,8 @@ enum RecipeImportMapper {
         case "мл", "миллилитр", "миллилитра", "миллилитров": unit = .milliliter
         case "л", "литр", "литра", "литров": unit = .liter
         case "шт", "штука", "штуки", "штук": unit = .piece
-        case "чл", "чайнаяложка", "чайныеложки", "чайныхложек": unit = .teaspoon
-        case "стл", "столоваяложка", "столовыеложки", "столовыхложек": unit = .tablespoon
+        case "чл", "чайнаяложка", "чайнойложки", "чайныеложки", "чайныхложек": unit = .teaspoon
+        case "стл", "столоваяложка", "столовойложки", "столовыеложки", "столовыхложек": unit = .tablespoon
         default: return nil
         }
         return (amount, unit)

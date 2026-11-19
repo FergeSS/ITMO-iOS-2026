@@ -3,15 +3,19 @@ import SwiftUI
 
 @Observable
 @MainActor
-private final class VkusVillSearchViewModel {
+final class VkusVillSearchViewModel {
     enum State {
         case idle, loading, results([VkusVillProduct]), failed
     }
 
     private(set) var state: State = .idle
     private(set) var suggestions: [VkusVillProduct] = []
-    private let catalog = VkusVillCatalog()
+    private let catalog: VkusVillCatalog
     private let logger = Logger(subsystem: "FergeS.MenuPlanner", category: "VkusVillCatalog")
+
+    init(catalog: VkusVillCatalog? = nil) {
+        self.catalog = catalog ?? VkusVillCatalog()
+    }
 
     func loadSuggestions(_ ids: [Int]) async {
         suggestions = []
