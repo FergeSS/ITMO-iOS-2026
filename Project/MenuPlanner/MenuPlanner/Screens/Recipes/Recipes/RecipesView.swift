@@ -6,6 +6,7 @@ struct RecipesView: View {
     @Environment(\.bottomBarInset) private var bottomBarInset
     @Query private var recipes: [Recipe]
     @State private var viewModel = RecipesViewModel()
+    @State private var showsRecipeImport = false
     @FocusState private var isSearching: Bool
 
     private let columns = [GridItem(.adaptive(minimum: 160), spacing: 12, alignment: .top)]
@@ -18,6 +19,17 @@ struct RecipesView: View {
             VStack(alignment: .leading, spacing: 12) {
                 heading
                 searchField
+                Button {
+                    isSearching = false
+                    showsRecipeImport = true
+                } label: {
+                    Label("Найти в интернете", systemImage: "globe")
+                        .font(AppFonts.smallStrong)
+                        .foregroundStyle(AppColors.accent)
+                        .frame(maxWidth: .infinity, minHeight: 36)
+                        .background(AppColors.accentSoft, in: RoundedRectangle(cornerRadius: 12))
+                }
+                .buttonStyle(.plain)
                 filters
                 sectionHeader(count: visibleRecipes.count)
             }
@@ -65,6 +77,9 @@ struct RecipesView: View {
         }
         .sheet(isPresented: $viewModel.isPresentingEditor) {
             RecipeEditorView()
+        }
+        .sheet(isPresented: $showsRecipeImport) {
+            RecipeImportView(query: viewModel.searchText)
         }
         .alert("Не удалось загрузить рецепты", isPresented: Binding(
             get: { viewModel.errorMessage != nil },

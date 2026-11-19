@@ -28,6 +28,7 @@ enum RecipeValidationError: LocalizedError {
 @Observable
 final class RecipeEditorViewModel {
     let recipe: Recipe?
+    let importedRecipe: VkusVillRecipe?
     var name: String
     var instructions: String
     var durationMinutes: Int
@@ -35,11 +36,13 @@ final class RecipeEditorViewModel {
     var ingredients: [RecipeIngredientDraft]
     var photoData: Data?
     var isLoadingPhoto = false
+    var remotePhotoFailed = false
     var errorMessage: String?
     var hasAttemptedSave = false
 
-    init(recipe: Recipe? = nil) {
+    init(recipe: Recipe? = nil, importedRecipe: VkusVillRecipe? = nil) {
         self.recipe = recipe
+        self.importedRecipe = importedRecipe
         name = recipe?.name ?? ""
         instructions = recipe?.recipeDescription ?? ""
         durationMinutes = recipe?.durationMinutes ?? 15
@@ -52,6 +55,15 @@ final class RecipeEditorViewModel {
                 unit: $0.unit
             )
         } ?? [RecipeIngredientDraft()]
+
+        if let importedRecipe {
+            name = importedRecipe.name
+            instructions = RecipeImportMapper.instructions(from: importedRecipe)
+            durationMinutes = RecipeImportMapper.duration(from: importedRecipe.cookingTime?.name) ?? 15
+            baseServings = importedRecipe.portions.flatMap { (1...100).contains($0) ? $0 : nil } ?? 2
+            let importedIngredients = RecipeImportMapper.ingredients(from: importedRecipe)
+            if !importedIngredients.isEmpty { ingredients = importedIngredients }
+        }
     }
 
     var canSave: Bool {
@@ -108,6 +120,29 @@ final class RecipeEditorViewModel {
         ingredients.removeAll { $0.id == id }
     }
 
+    func loadImportedPhoto() async {
+        guard let url = importedRecipe?.photoURL,
+                photoData == nil,
+                !isLoadingPhoto
+        else {
+            return
+        }
+        
+        isLoadingPhoto = true
+        
+        defer {
+            isLoadingPhoto = false
+        }
+        
+        do {
+            let data = try await VkusVillCatalog().recipePhoto(from: url)
+            try Task.checkCancellation()
+            photoData = data
+        } catch {
+            if !Task.isCancelled { remotePhotoFailed = true }
+        }
+    }
+
     func validate() throws {
         switch firstInvalidField {
         case .name: throw RecipeValidationError.nameRequired
@@ -132,6 +167,7 @@ final class RecipeEditorViewModel {
             let name = row.name.trimmingCharacters(in: .whitespacesAndNewlines)
             let key = normalizedName(name)
             let ingredient = productsByName[key] ?? Ingredient(name: name)
+            ingredient.addVkusVillProductSuggestions(row.suggestedProductIDs)
             productsByName[key] = ingredient
             return RecipeIngredient(
                 ingredient: ingredient,
@@ -159,7 +195,8 @@ final class RecipeEditorViewModel {
                 durationMinutes: durationMinutes,
                 baseServings: baseServings,
                 ingredients: rows,
-                photoData: photoData
+                photoData: photoData,
+                sourceURL: importedRecipe?.sourceURL
             )
             context.insert(savedRecipe)
         }

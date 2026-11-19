@@ -13,11 +13,29 @@ final class RecipeIngredientDraft: Identifiable {
     var name: String
     var quantity: String
     var unit: MeasurementUnit
+    let sourceQuantity: String?
+    private let importedName: String
+    private let importedProductIDs: [Int]
 
-    init(name: String = "", quantity: String = "", unit: MeasurementUnit = .gram) {
+    init(name: String = "",
+         quantity: String = "",
+         unit: MeasurementUnit = .gram,
+         sourceQuantity: String? = nil,
+         suggestedProductIDs: [Int] = []
+    ) {
         self.name = name
         self.quantity = quantity
         self.unit = unit
+        
+        self.sourceQuantity = sourceQuantity
+        self.importedName = name
+        self.importedProductIDs = suggestedProductIDs
+    }
+
+    var suggestedProductIDs: [Int] {
+        let currentName = name.trimmingCharacters(in: .whitespacesAndNewlines)
+        return currentName.caseInsensitiveCompare(importedName.trimmingCharacters(in: .whitespacesAndNewlines))
+            == .orderedSame ? importedProductIDs : []
     }
 
     var nameError: String? {

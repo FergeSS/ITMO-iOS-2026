@@ -9,6 +9,7 @@ import SwiftUI
 
 struct MainTabView: View {
     @State private var selectedTab: MainTab = .menu
+    @State private var shoppingWeekStart = PlanWeek.interval(containing: .now).start
     @State private var isTabBarHiddenByScreen = false
     @State private var barHeight: CGFloat = 80
     @State private var isKeyboardVisible = false
@@ -21,7 +22,12 @@ struct MainTabView: View {
         GeometryReader { geometry in
             TabView(selection: $selectedTab) {
                 Tab("Меню", image: MainTab.menu.iconName, value: MainTab.menu) {
-                    placeholder(for: .menu)
+                    NavigationStack {
+                        WeekPlanView { weekStart in
+                            shoppingWeekStart = weekStart
+                            selectedTab = .shopping
+                        }
+                    }
                 }
 
                 Tab("Рецепты", image: MainTab.recipes.iconName, value: MainTab.recipes) {
@@ -31,7 +37,9 @@ struct MainTabView: View {
                 }
 
                 Tab("Покупки", image: MainTab.shopping.iconName, value: MainTab.shopping) {
-                    placeholder(for: .shopping)
+                    NavigationStack {
+                        ShoppingView(weekStart: shoppingWeekStart) { selectedTab = .menu }
+                    }
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -69,16 +77,6 @@ struct MainTabView: View {
         }
     }
 
-    private func placeholder(for tab: MainTab) -> some View {
-        NavigationStack {
-            Text(tab.title)
-                .font(AppFonts.title)
-                .foregroundStyle(AppColors.primaryText)
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .background(AppColors.background)
-                .toolbar(.hidden, for: .tabBar)
-        }
-    }
 }
 
 #Preview("Вкладки") {

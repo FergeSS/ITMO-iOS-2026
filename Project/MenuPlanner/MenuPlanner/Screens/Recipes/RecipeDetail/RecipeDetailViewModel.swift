@@ -44,9 +44,13 @@ final class RecipeDetailViewModel {
     }
 
     func delete(_ recipe: Recipe, in context: ModelContext) -> Bool {
-        context.delete(recipe)
-        
         do {
+            let recipeID = recipe.id
+            let entries = try context.fetch(FetchDescriptor<MealPlanEntry>(
+                predicate: #Predicate { $0.recipe.id == recipeID }
+            ))
+            entries.forEach { context.delete($0) }
+            context.delete(recipe)
             try context.save()
             return true
         } catch {
