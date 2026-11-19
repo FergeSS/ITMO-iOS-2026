@@ -8,7 +8,11 @@ final class RecipeImportViewModel {
     private(set) var isLoading = false
     private(set) var hasError = false
     private(set) var hasMore = false
-    private let catalog = VkusVillCatalog()
+    private let catalog: VkusVillCatalog
+
+    init(catalog: VkusVillCatalog? = nil) {
+        self.catalog = catalog ?? VkusVillCatalog()
+    }
 
     func load(_ query: String, page: Int) async {
         guard !Task.isCancelled else { return }

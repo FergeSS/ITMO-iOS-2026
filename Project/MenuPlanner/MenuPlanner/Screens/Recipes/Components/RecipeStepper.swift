@@ -4,6 +4,7 @@ struct RecipeStepper: View {
     let title: String
     @Binding var value: Int
     let range: ClosedRange<Int>
+    var accessibilityID = "recipeStepper"
 
     var body: some View {
         HStack(spacing: 12) {
@@ -29,6 +30,7 @@ struct RecipeStepper: View {
         }
         .buttonStyle(RecipePressStyle())
         .disabled(!enabled)
+        .accessibilityIdentifier("\(accessibilityID).\(symbol)")
     }
 }
 

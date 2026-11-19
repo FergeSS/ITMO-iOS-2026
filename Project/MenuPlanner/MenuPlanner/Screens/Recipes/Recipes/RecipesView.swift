@@ -105,6 +105,7 @@ struct RecipesView: View {
                 .autocorrectionDisabled()
                 .submitLabel(.search)
                 .focused($isSearching)
+                .accessibilityIdentifier("recipes.search")
                 .onSubmit { isSearching = false }
         }
         .padding(12)
@@ -148,6 +149,8 @@ struct RecipesView: View {
                     .background(AppColors.surface, in: Circle())
             }
             .buttonStyle(.plain)
+            .accessibilityLabel("Добавить рецепт")
+            .accessibilityIdentifier("recipes.add")
         }
     }
 
@@ -170,6 +173,7 @@ struct RecipesView: View {
                                 .contentShape(Rectangle())
                         }
                         .buttonStyle(.plain)
+                        .accessibilityIdentifier(filter == .quick ? "recipes.filter.quick" : "recipes.filter.all")
                     }
                 }
             }
@@ -187,6 +191,8 @@ struct RecipesView: View {
                     .foregroundStyle(AppColors.accent)
                     .frame(width: 44, height: 44)
             }
+            .accessibilityLabel("Сортировка и избранное")
+            .accessibilityIdentifier("recipes.sort")
         }
     }
 

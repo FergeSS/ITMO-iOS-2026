@@ -42,7 +42,7 @@ struct RecipeDetailView: View {
 
                     RecipeStepper(
                         title: RecipeFormatting.count(viewModel.servings, one: "порция", few: "порции", many: "порций"),
-                        value: $viewModel.servings, range: 1...100
+                        value: $viewModel.servings, range: 1...100, accessibilityID: "recipeDetail.servings"
                     )
                     .font(AppFonts.strong)
                     .foregroundStyle(AppColors.primaryText)
@@ -119,6 +119,8 @@ struct RecipeDetailView: View {
                         .renderingMode(.template)
                         .foregroundStyle(recipe.isFavorite ? AppColors.warm : AppColors.accent)
                 }
+                .accessibilityLabel(recipe.isFavorite ? "Убрать из избранного" : "Добавить в избранное")
+                .accessibilityIdentifier("recipeDetail.favorite")
             }
             ToolbarItem(placement: .topBarTrailing) {
                 Menu("Действия", systemImage: "ellipsis") {
@@ -127,6 +129,7 @@ struct RecipeDetailView: View {
                         isConfirmingDeletion = true
                     }
                 }
+                .accessibilityIdentifier("recipeDetail.actions")
             }
         }
         .tint(AppColors.accent)

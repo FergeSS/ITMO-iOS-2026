@@ -213,6 +213,7 @@ struct OnboardingView: View {
                 .contentShape(RoundedRectangle(cornerRadius: 16))
         }
         .buttonStyle(.plain)
+        .accessibilityIdentifier("onboarding.start")
     }
 }
 

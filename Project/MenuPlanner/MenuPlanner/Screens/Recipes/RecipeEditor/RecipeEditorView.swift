@@ -33,6 +33,7 @@ struct RecipeEditorView: View {
                         section("Название") {
                             field(.name) {
                                 TextField("Например, омлет с овощами", text: $viewModel.name)
+                                    .accessibilityIdentifier("recipeEditor.name")
                                     .focused($focusedField, equals: .name)
                                     .submitLabel(.next)
                                     .onSubmit { focusedField = viewModel.ingredients.first.map { .ingredientName($0.id) } }
@@ -135,9 +136,11 @@ struct RecipeEditorView: View {
                 .toolbar {
                     ToolbarItem(placement: .cancellationAction) {
                         Button("Отмена", systemImage: "xmark") { dismiss() }
+                            .accessibilityIdentifier("recipeEditor.cancel")
                     }
                     ToolbarItem(placement: .confirmationAction) {
                         Button("Сохранить", systemImage: "checkmark") { save(using: proxy) }
+                            .accessibilityIdentifier("recipeEditor.save")
                             .buttonStyle(.borderedProminent)
                             .disabled(viewModel.isLoadingPhoto)
                     }

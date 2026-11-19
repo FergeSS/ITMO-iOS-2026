@@ -39,8 +39,11 @@ final class RecipeEditorViewModel {
     var remotePhotoFailed = false
     var errorMessage: String?
     var hasAttemptedSave = false
+    private let catalog: VkusVillCatalog
 
-    init(recipe: Recipe? = nil, importedRecipe: VkusVillRecipe? = nil) {
+    init(recipe: Recipe? = nil, importedRecipe: VkusVillRecipe? = nil,
+         catalog: VkusVillCatalog? = nil) {
+        self.catalog = catalog ?? VkusVillCatalog()
         self.recipe = recipe
         self.importedRecipe = importedRecipe
         name = recipe?.name ?? ""
@@ -135,7 +138,7 @@ final class RecipeEditorViewModel {
         }
         
         do {
-            let data = try await VkusVillCatalog().recipePhoto(from: url)
+            let data = try await catalog.recipePhoto(from: url)
             try Task.checkCancellation()
             photoData = data
         } catch {
