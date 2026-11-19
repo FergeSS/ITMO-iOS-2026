@@ -12,7 +12,14 @@ final class Ingredient {
     private(set) var id : UUID
     var name: String
     var category: IngredientCategory
-    private var storeURL: URL?
+    private(set) var storeURL: URL?
+    private var vkusVillProductData: Data?
+    private(set) var suggestedVkusVillProductIDs: [Int]?
+
+    var vkusVillProduct: VkusVillProduct? {
+        guard let vkusVillProductData else { return nil }
+        return try? JSONDecoder().decode(VkusVillProduct.self, from: vkusVillProductData)
+    }
 
     init (
         id: UUID = UUID(),
@@ -28,5 +35,18 @@ final class Ingredient {
 
     func updateUrl(with url: URL?) {
         self.storeURL = url
+    }
+
+    func updateVkusVillProduct(_ product: VkusVillProduct) throws {
+        vkusVillProductData = try JSONEncoder().encode(product)
+    }
+
+    func addVkusVillProductSuggestions(_ ids: [Int]) {
+        guard !ids.isEmpty else { return }
+        var existing = suggestedVkusVillProductIDs ?? []
+        for id in ids where !existing.contains(id) {
+            existing.append(id)
+        }
+        suggestedVkusVillProductIDs = existing
     }
 }

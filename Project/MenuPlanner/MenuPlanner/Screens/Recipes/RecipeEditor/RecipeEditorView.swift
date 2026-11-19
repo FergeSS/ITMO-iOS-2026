@@ -14,6 +14,10 @@ struct RecipeEditorView: View {
         _viewModel = State(initialValue: RecipeEditorViewModel(recipe: recipe))
     }
 
+    init(importing recipe: VkusVillRecipe) {
+        _viewModel = State(initialValue: RecipeEditorViewModel(importedRecipe: recipe))
+    }
+
     var body: some View {
         @Bindable var viewModel = viewModel
 
@@ -22,6 +26,9 @@ struct RecipeEditorView: View {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 24) {
                         photoPicker
+                        if let importedRecipe = viewModel.importedRecipe {
+                            importInfo(importedRecipe)
+                        }
 
                         section("Название") {
                             field(.name) {
@@ -38,6 +45,17 @@ struct RecipeEditorView: View {
                             }
                             field(.servings) {
                                 RecipeStepper(title: "Порций: \(viewModel.baseServings)", value: $viewModel.baseServings, range: 1...100)
+                            }
+                            if let importedRecipe = viewModel.importedRecipe {
+                                let time = importedRecipe.cookingTime?.name ?? "не указано"
+                                Text("Время в источнике: \(time). Проверь перед сохранением.")
+                                    .font(AppFonts.small)
+                                    .foregroundStyle(AppColors.secondaryText)
+                                if !(1...100).contains(importedRecipe.portions ?? 0) {
+                                    Text("Уточни количество порций: в источнике нет подходящего значения.")
+                                        .font(AppFonts.small)
+                                        .foregroundStyle(AppColors.secondaryText)
+                                }
                             }
                         }
 
@@ -135,6 +153,7 @@ struct RecipeEditorView: View {
             .tint(AppColors.accent)
         }
         .background(AppColors.background.ignoresSafeArea())
+        .task { await viewModel.loadImportedPhoto() }
         .task(id: selectedPhoto) {
             guard let selectedPhoto else { return }
             viewModel.isLoadingPhoto = true
@@ -161,6 +180,22 @@ struct RecipeEditorView: View {
         } message: {
             Text(viewModel.errorMessage ?? "")
         }
+    }
+
+    private func importInfo(_ recipe: VkusVillRecipe) -> some View {
+        VStack(alignment: .leading, spacing: 6) {
+            if let url = recipe.sourceURL {
+                Link("Оригинал рецепта во ВкусВилле", destination: url)
+                    .font(AppFonts.smallStrong)
+                    .foregroundStyle(AppColors.accent)
+            }
+            if viewModel.remotePhotoFailed, viewModel.photoData == nil {
+                Text("Фото не загрузилось. Можно добавить своё или сохранить без фото.")
+                    .font(AppFonts.small)
+                    .foregroundStyle(AppColors.secondaryText)
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 
     private var photoPicker: some View {

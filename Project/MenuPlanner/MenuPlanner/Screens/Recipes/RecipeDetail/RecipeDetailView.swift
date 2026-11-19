@@ -93,6 +93,12 @@ struct RecipeDetailView: View {
                         .foregroundStyle(AppColors.secondaryText)
                         .fixedSize(horizontal: false, vertical: true)
                 }
+
+                if let source = recipe.sourceURL {
+                    Link("Оригинал рецепта во ВкусВилле", destination: source)
+                        .font(AppFonts.smallStrong)
+                        .foregroundStyle(AppColors.accent)
+                }
             }
             .padding(.horizontal, 24)
             .padding(.vertical, 12)

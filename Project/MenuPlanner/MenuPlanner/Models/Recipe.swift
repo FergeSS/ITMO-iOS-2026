@@ -15,6 +15,7 @@ final class Recipe {
     var durationMinutes: Int
     private(set) var baseServings: Int
     var photoData: Data?
+    var sourceURL: URL?
     var isBuiltIn: Bool = false
     var isFavorite: Bool = false
     
@@ -30,7 +31,8 @@ final class Recipe {
         ingredients: [RecipeIngredient],
         photoData: Data? = nil,
         isBuiltIn: Bool = false,
-        isFavorite: Bool = false
+        isFavorite: Bool = false,
+        sourceURL: URL? = nil
     ) {
         self.id = id
         self.name = name
@@ -41,6 +43,7 @@ final class Recipe {
         self.photoData = photoData
         self.isBuiltIn = isBuiltIn
         self.isFavorite = isFavorite
+        self.sourceURL = sourceURL
     }
 
     func updateBaseServings(to servings: Int) {

@@ -40,6 +40,12 @@ struct RecipeIngredientEditorRow: View {
                 .frame(minWidth: 76, minHeight: 48)
                 .background(AppColors.surface, in: RoundedRectangle(cornerRadius: 12))
             }
+            if let quantity = row.sourceQuantity {
+                Text("В оригинале: \(quantity). Уточни количество и единицу или убери ингредиент.")
+                    .font(AppFonts.small)
+                    .foregroundStyle(AppColors.secondaryText)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            }
         }
     }
 }
